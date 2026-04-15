@@ -16,7 +16,7 @@ def produce_df_expert_team_individual(
             best_individual = team_dummy.members[0]
             best_individual_score = best_individual.score
 
-            expert_team = generate_expert_team(sources, heuristic_size, team_size=9)
+            expert_team = generate_expert_team(sources, heuristic_size, size=9)
             expert_team_outcome = 0.0
             if outcome == "accuracy_opinion":
                 expert_team_outcome, _ = expert_team.accuracy_opinion()
