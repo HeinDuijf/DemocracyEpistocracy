@@ -8,12 +8,12 @@ if __name__ == "__main__":
     # Deliberation
     team_types = ["expert", "diverse"]
     GridSimulation(
-        outcomes=["evidence"],
-        team_types=team_types,
+        procedures=["deliberation"],
+        group_types=team_types,
         n_sources_list=[13, 17],
         reliability_distribution_list=rels,
         heuristic_size=5,
-        team_size=9,
+        group_size=9,
         n_samples=1,
     ).run()
 
@@ -23,11 +23,11 @@ if __name__ == "__main__":
     ]
 
     GridSimulation(
-        outcomes=["opinion"],
-        team_types=team_types,
+        procedures=["aggregation"],
+        group_types=team_types,
         n_sources_list=[13, 17],
         reliability_distribution_list=rels,
         heuristic_size=5,
-        team_size=1_001,
+        group_size=1_001,
         n_samples=1_000,
     ).run()
