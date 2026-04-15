@@ -80,7 +80,7 @@ def generate_random_crowd(
         agent for agent in possible_agents if agent.score >= qualifying_score
     ]
 
-    random_group = rd.sample(qualified_agents, size)
+    random_group = rd.choices(qualified_agents, k=size)
     return Team(random_group, sources)
 
 
@@ -89,7 +89,7 @@ def generate_restricted_team(
     heuristic_size: int | list,
     size: int,
     qualifying_percentile: float,
-    without_replacement: bool = False,
+    without_replacement: bool = True,
 ):
     if not isinstance(heuristic_size, list):
         heuristic_size = [heuristic_size]
