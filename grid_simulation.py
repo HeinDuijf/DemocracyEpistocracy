@@ -7,22 +7,22 @@ from simulation import Simulation
 class GridSimulation:
     def __init__(
         self,
-        outcomes: list[str],
-        team_types: list,
+        procedures: list[str],
+        group_types: list,
         n_sources_list: list,
         reliability_distribution_list: list,
         n_samples: int,
         heuristic_size: int | list = 5,
-        team_size: int = 9,
+        group_size: int = 9,
         estimate_sample_size: int | None = None,
     ):
-        self.outcomes = outcomes
-        self.team_types = team_types
+        self.procedures = procedures
+        self.group_types = group_types
         self.n_sources_list = n_sources_list
         self.reliability_distribution_list = reliability_distribution_list
         self.n_samples = n_samples
         self.heuristic_size = heuristic_size
-        self.team_size = team_size
+        self.group_size = group_size
         self.estimate_sample_size = estimate_sample_size
 
     def run(self):
@@ -38,12 +38,12 @@ class GridSimulation:
     def create_parameter_df(self):
         data = [
             {
-                "outcomes": self.outcomes,
-                "team_types": self.team_types,
+                "procedures": self.procedures,
+                "group_types": self.group_types,
                 "n_sources": n_sources,
                 "reliability_distribution": rel_dist,
                 "heuristic_size": self.heuristic_size,
-                "team_size": self.team_size,
+                "group_size": self.group_size,
                 "n_samples": self.n_samples,
                 "estimate_sample_size": None,
             }
@@ -58,8 +58,8 @@ class GridSimulation:
 
 if __name__ == "__main__":
     GridSimulation(
-        outcomes=["opinion"],
-        team_types=["expert", "diverse"],
+        procedures=["aggregation", "deliberation"],
+        group_types=["expert", "diverse"],
         n_sources_list=[13],
         reliability_distribution_list=[("equi", rel_mean, 0.2) for rel_mean in [0.55]],
         n_samples=5,
