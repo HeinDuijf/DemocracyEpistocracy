@@ -1,0 +1,11 @@
+archive
+lib
+tests
+.idea
+__pycache__
+.vscode
+.ipynb_checkpoints
+.pytest_cache
+playground.ipynb
+notes.md
+*.zip

@@ -1,0 +1,73 @@
+from itertools import combinations
+
+import numpy as np
+from numpy.typing import NDArray
+
+import utils.config as cfg
+from utils.basic_functions import calculate_competence
+
+
+class Sources:
+    """
+    A class representing sources.
+
+    Attributes
+    ----------
+        n_sources (int):
+            The number of sources.
+        sources (np.array):
+            An array containing the sources.
+        reliabilitiy_distribution:
+            The type of reliability distribution. At the moment, only equidistant
+            distributions are implemented.
+        reliabilities (np.array[float]):
+            An array containing the sources’ reliabilities.
+        valences (list):
+            A list containing the sources’ valences.
+    """
+
+    def __init__(self, n_sources, reliability_distribution=("equi", 0.6, 0.2)):
+        self.n_sources = n_sources
+        self.sources = np.arange(n_sources, dtype=int)
+        self.reliability_distribution = reliability_distribution
+        self.reliabilities = self.initialize_reliabilities()
+        self.valences = []
+        self.update_valences()
+
+    def initialize_reliabilities(self) -> NDArray[np.float64]:
+        if "equi" in self.reliability_distribution[0]:
+            reliability_mean = self.reliability_distribution[1]
+            # reliability_range = self.reliability_distribution[2]
+            reliability_distance = self.reliability_distribution[2]
+            reliability_min = reliability_mean - reliability_distance / 2
+            step = reliability_distance / (self.n_sources - 1)
+            reliabilities: NDArray[np.float64] = reliability_min + step * np.arange(
+                0, self.n_sources, dtype=int
+            )
+            return reliabilities
+        return np.array([], dtype=np.float64)
+
+    def update_valences(self) -> None:
+        random_list = np.random.rand(self.n_sources)
+        valences = random_list < self.reliabilities
+
+        def translation(x: bool) -> int:
+            if x:
+                return cfg.vote_for_positive
+            else:
+                return cfg.vote_for_negative
+
+        self.valences = np.array(
+            [translation(valences[k]) for k in range(len(valences))]
+        )
+
+    def set_valence(self, source, valence) -> None:
+        self.valences[source] = valence
+
+    def all_heuristics(self, heuristic_size: int):
+        """Returns iterable"""
+        return combinations(self.sources, heuristic_size)
+
+    def problem_difficulty(self) -> float:
+        return calculate_competence(self.reliabilities)
+        return calculate_competence(self.reliabilities)

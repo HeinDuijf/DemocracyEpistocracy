@@ -1,0 +1,16 @@
+scipy
+numpy
+pandas
+matplotlib
+seaborn
+networkx
+statsmodels
+pytest
+pyvis
+statistics
+notebook
+concurrent.futures
+tqdm
+ipython
+
+
