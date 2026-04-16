@@ -113,7 +113,7 @@ def produce_df_1samp(
     outcome: str = "accuracy_opinion",
     diverse_team_type: str = "diverse",
     heuristic_size: int | list[int] = 5,
-    team_size: int = 9,
+    group_size: int = 9,
     reliability_range: float = 0.2,
     n_sources_list: list[int] = [13, 17],
     n_decimals: int = 3,
@@ -131,7 +131,7 @@ def produce_df_1samp(
         diverse_team_type: The type of diverse team to analyze. Defaults to "diverse".
         heuristic_size: The heuristic size used in the simulations. Can be an integer
         or a list of integers. Defaults to 5.
-        team_size: The team size. Defaults to 9.
+        group_size: The group size. Defaults to 9.
         reliability_range: The range of the source reliability distribition. Defaults
         to 0.2.
         n_sources_list: The number of sources to consider. Defaults to [13, 17].
@@ -164,17 +164,17 @@ def produce_df_1samp(
         df = pd.read_csv(f"data/{file}")
         if (
             heuristic_str in df.heuristic_size.values
-            and team_size in df.team_size.values
+            and group_size in df.group_size.values
             and reliability_range in df.reliability_range.values
         ):
-            if diverse_team_type in df.team_type.values:
+            if diverse_team_type in df.group_type.values:
                 n_sources = df.at[0, "n_sources"]
                 if n_sources not in n_sources_list:
                     continue
                 rel_mean = df.at[0, "reliability_mean"]
-                df_diverse = df[df["team_type"] == diverse_team_type]
+                df_diverse = df[df["group_type"] == diverse_team_type]
                 diverse_accuracy = df_diverse[outcome].median()
-                expert_accuracy = df[df["team_type"] == "expert"][outcome].median()
+                expert_accuracy = df[df["group_type"] == "expert"][outcome].median()
 
                 diverse_error = 1 - diverse_accuracy
                 expert_error = 1 - expert_accuracy
@@ -250,7 +250,7 @@ def produce_df_paired(
     y: str = "accuracy_bounded",
     diverse_team_type: str = "diverse",
     heuristic_size: int | list[int] = 5,
-    team_size: int = 9,
+    group_size: int = 9,
     reliability_range: float = 0.2,
     n_sources_list: list[int] = [13, 17],
     n_decimals: int = 3,
@@ -269,7 +269,7 @@ def produce_df_paired(
         diverse_team_type: The type of diverse team to analyze. Defaults to "diverse".
         heuristic_size: The heuristic size used in the simulations. Can be an integer
         or a list of integers. Defaults to 5.
-        team_size: The team size. Defaults to 9.
+        group_size: The group size. Defaults to 9.
         reliability_range: The range of the source reliability distribition. Defaults
         to 0.2.
         n_sources_list: The number of sources to consider. Defaults to [13, 17].
@@ -301,15 +301,15 @@ def produce_df_paired(
         df = pd.read_csv(f"data/{file}")
         if (
             heuristic_str in df.heuristic_size.values
-            and team_size in df.team_size.values
+            and group_size in df.group_size.values
             and reliability_range in df.reliability_range.values
         ):
-            if diverse_team_type in df.team_type.values:
+            if diverse_team_type in df.group_type.values:
                 n_sources = df.at[0, "n_sources"]
                 if n_sources not in n_sources_list:
                     continue
                 rel_mean = df.at[0, "reliability_mean"]
-                df_diverse = df[df["team_type"] == diverse_team_type]
+                df_diverse = df[df["group_type"] == diverse_team_type]
                 data_x = np.array(df_diverse[x])
                 data_y = np.array(df_diverse[y])
                 statistics_result = wilcoxon_results(
