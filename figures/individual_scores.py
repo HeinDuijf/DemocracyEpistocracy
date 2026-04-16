@@ -34,11 +34,21 @@ def boxplot_individual_scores(n_sources: int = 13, heuristic_size: int = 5, show
     )
     plt.figure(figsize=(4, 3))
 
-    fig = sns.boxplot(data=scores_df, color="lightgray")  # palette="Grays"
+    fig = sns.boxplot(
+        data=scores_df,
+        palette="Greys",
+        boxprops=dict(linewidth=0.5),
+        whiskerprops=dict(linewidth=0.5),
+        capprops=dict(linewidth=0.5),
+        medianprops=dict(linewidth=0.5),
+        flierprops=dict(linewidth=0.5),
+    )
+
+    # palette="Grays"
     fig.set_yticks(0.4 + 0.1 * np.arange(7, dtype=int))
     # fig.set_title("Individual scores")
     fig.set_xlabel("Mean source reliability")
-    fig.set_ylabel("Score")
+    fig.set_ylabel("Competence")
     if show:
         plt.show()
 
