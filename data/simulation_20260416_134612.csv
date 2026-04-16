@@ -1,0 +1,3 @@
+,group_size,n_sources,heuristic_size,reliability_mean,reliability_range,n_samples,group_type,procedure,accuracy,precision,diversity,average
+0,9,13,5,0.6,0.2,1,expert,deliberation,0.7999166208847732,,0.4259259259259261,0.7785499897119341
+1,9,13,5,0.6,0.2,1,diverse,deliberation,0.773033226853774,,0.8055555555555551,0.6864989866255145
