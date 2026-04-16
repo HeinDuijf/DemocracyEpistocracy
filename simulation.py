@@ -54,14 +54,14 @@ class Simulation:
 
         # Run simulations in parallel for aggregation
         if "aggregation" in self.procedures:
-            team_simulate_aggregation = partial(
+            crowd_simulate_aggregation = partial(
                 self.group_simulate, procedure="aggregation"
             )
             with Pool() as pool:
                 params, total = self.get_params()
                 results_aggregation = pd.DataFrame(
                     tqdm(
-                        pool.map(team_simulate_aggregation, params),
+                        pool.map(crowd_simulate_aggregation, params),
                         total=total,
                         desc="Calculating/estimating aggregation results",
                     )
