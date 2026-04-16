@@ -1,3 +1,0 @@
-,team_size,n_sources,heuristic_size,reliability_mean,reliability_range,n_samples,team_type,accuracy_opinion,precision_opinion,accuracy_evidence,accuracy_bounded,precision_bounded,diversity,average
-0,9,17,5,0.6,0.2,1,expert,,,0.8288615933437351,,,0.4259259259259261,0.7937819227430555
-1,9,17,5,0.6,0.2,1,diverse,,,0.802961607356625,,,0.8726851851851843,0.6777456129286024
