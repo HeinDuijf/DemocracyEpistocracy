@@ -10,6 +10,17 @@ from models.sources import Sources
 
 
 def boxplot_individual_scores(n_sources: int = 13, heuristic_size: int = 5, show=False):
+    """Plot a boxplot of all competence scores across reliability levels.
+
+    Generates all heuristics for each reliability mean in [0.55, 0.60, 0.65, 0.70, 0.75]
+    and plots the distribution of scores as a boxplot. Saves the result to
+    figures/images/individual_scores.eps and .png.
+
+    Args:
+        n_sources: Number of sources.
+        heuristic_size: Number of sources each agent draws on.
+        show: If True, displays the plot interactively before saving.
+    """
     scores_df = pd.DataFrame()
     rel_mean_list = [0.55, 0.6, 0.65, 0.7, 0.75]
     for rel_mean in rel_mean_list:
