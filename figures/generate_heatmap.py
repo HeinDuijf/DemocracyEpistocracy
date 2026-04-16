@@ -15,6 +15,29 @@ def heatmap(
     show_cbar: bool = True,
     filename: str | None = None,
 ):
+    """Plot a heatmap of the accuracy difference between diverse and expert groups.
+
+    For each combination of reliability mean and number of sources, computes the
+    difference between the median accuracy of the diverse group and the expert group.
+    The effect can be expressed as an absolute percentage-point difference or as a
+    relative error reduction.
+
+    Args:
+        procedure: Decision procedure to load data for (e.g. "deliberation",
+            "aggregation").
+        diverse_team_type: Group type label used as the diverse baseline.
+        heuristic_size: Heuristic size(s) to filter on when loading data.
+        n_sources_list: Number-of-sources values to include (one column each).
+        rel_mean_max: Upper bound for reliability mean values shown in the heatmap.
+        measure: "absolute" for percentage-point difference, "relative" for error
+            reduction as a percentage of the remaining error.
+        colors: If True, uses a diverging colormap (coolwarm) centred at zero;
+            otherwise uses a sequential grayscale.
+        show: If True, displays the plot interactively after saving.
+        show_cbar: If True, includes a color bar.
+        filename: Output path without extension. Defaults to
+            "figures/images/heatmap_{procedure}_{measure}". Saves .eps and .png.
+    """
     df = produce_df_results(
         procedure_list=[procedure],
         heuristic_size=heuristic_size,
