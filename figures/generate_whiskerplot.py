@@ -12,11 +12,26 @@ def produce_whiskers_plot(
     restricted_list: list[int] = [10, 30, 50, 70, 90],
     filename=None,
 ):
+    """Plot accuracy ranges for aggregation and deliberation procedures.
+
+    Produces a grid of whisker plots with rows for each number of sources and
+    columns for each reliability mean. Each plot shows the min–max accuracy
+    range per group type. The best and worst performing group in each facet are
+    marked with an asterisk.
+
+    Args:
+        df: Simulation results. If None, loaded from the data folder via
+            produce_df_results().
+        n_sources_list: Number-of-sources values to include (one row each).
+        rel_mean_list: Reliability mean values to include (one column each).
+        restricted_list: Restricted-group sizes to include in the plot.
+        filename: Output path without extension. Saves .eps and .png if given,
+            otherwise displays interactively.
+    """
     if df is None:
         df = produce_df_results()
 
     restricted_list_str = [str(r) for r in restricted_list]
-
     reliability_means = [
         rel_mean
         for rel_mean in sorted(df["reliability_mean"].unique())
@@ -53,19 +68,31 @@ def produce_whiskers_plot(
         ax.plot([lo, lo], [i - cap, i + cap], color=color, linewidth=linewidth)
         ax.plot([hi, hi], [i - cap, i + cap], color=color, linewidth=linewidth)
 
+    def make_yticklabels(categories):
+        labels = []
+        first_restricted = True
+        for cat in categories:
+            if cat == "expert (delib)":
+                labels.append("expert (delib)")
+            elif cat == "diverse":
+                labels.append("diverse")
+            elif first_restricted:
+                labels.append(f"{cat.split('_')[-1]} restricted")
+                first_restricted = False
+            else:
+                labels.append(cat.split("_")[-1])
+        return labels
+
     for row, n_sources in enumerate(n_sources_list):
-        df_dummy = df[df["n_sources"] == n_sources]
-        agg = df_dummy[df_dummy["procedure"] == "aggregation"]
-        delib = df_dummy[df_dummy["procedure"] == "deliberation"]
+        df_row = df[df["n_sources"] == n_sources]
+        agg = df_row[df_row["procedure"] == "aggregation"]
+        delib = df_row[df_row["procedure"] == "deliberation"]
 
-        # group_types =
         group_types = [
-            group_type
-            for group_type in agg["group_type"].unique()
-            if ("restricted" not in group_type)
-            or (group_type.split("_")[-1] in restricted_list_str)
+            gt
+            for gt in agg["group_type"].unique()
+            if "restricted" not in gt or gt.split("_")[-1] in restricted_list_str
         ]
-
         agg_categories = sorted(
             group_types, key=lambda x: -1 if x == "diverse" else int(x.split("_")[-1])
         )
@@ -88,12 +115,11 @@ def produce_whiskers_plot(
             x_offset = x_range * 0.02
 
             for i, cat in enumerate(categories):
-                if cat == "expert (delib)":
-                    vals = expert_vals
-                else:
-                    vals = facet_agg[facet_agg["group_type"] == cat][
-                        "accuracy"
-                    ].dropna()
+                vals = (
+                    expert_vals
+                    if cat == "expert (delib)"
+                    else facet_agg[facet_agg["group_type"] == cat]["accuracy"].dropna()
+                )
                 draw_range(ax, vals, i, "black")
                 if len(vals) == 0:
                     continue
@@ -120,66 +146,20 @@ def produce_whiskers_plot(
             ax.axhline(1.5, color="gray", linewidth=0.8, linestyle="--")
             ax.yaxis.grid(True, color="lightgray", linewidth=0.5, zorder=0)
             ax.set_axisbelow(True)
-            ax.xaxis.set_major_locator(MultipleLocator(0.01))
-            if rel_mean == 0.55:
-                ax.xaxis.set_major_locator(MultipleLocator(0.02))
-
+            locator = (
+                MultipleLocator(0.02) if rel_mean == 0.55 else MultipleLocator(0.01)
+            )
+            ax.xaxis.set_major_locator(locator)
             ax.set_xlabel("Group reliability")
-            # ax.set_title(f"n_sources={n_sources}, Reliability (mean) = {rel_mean}")
 
-        yticklabels = []
-        first_restricted = True
-        for cat in categories:
-            if cat == "expert (delib)":
-                yticklabels.append("expert (delib)")
-            elif cat == "diverse":
-                yticklabels.append("diverse")
-            elif first_restricted:
-                yticklabels.append(f"restricted  {cat.split('_')[-1]}")
-                first_restricted = False
-            else:
-                yticklabels.append(f"           {cat.split('_')[-1]}")
+        # Right-side y-tick labels
+        ax_right = axes[row, -1]
+        ax_right.yaxis.set_label_position("right")
+        ax_right.yaxis.set_ticks_position("right")
+        ax_right.set_yticks(range(len(categories)))
+        ax_right.set_yticklabels(make_yticklabels(categories), ha="left")
 
-        axes[row, -1].yaxis.set_label_position("right")
-        axes[row, -1].yaxis.set_ticks_position("right")
-        axes[row, -1].set_yticks(range(len(categories)))
-        axes[row, -1].set_yticklabels(yticklabels)
-
-    plt.tight_layout()
-    for row in range(n_rows - 1):
-        for col in range(n_cols):
-            axes[row, col].set_xlabel("")
-
-    for ax in axes.flat:
-        x_min, x_max = ax.get_xlim()
-        margin = (x_max - x_min) * 0.05
-        ax.set_xlim(x_min - margin, x_max + margin)
-
-    # Hide all left-side tick labels
-    for row in range(n_rows):
-        for col in range(n_cols):
-            plt.setp(axes[row, col].get_yticklabels(), visible=False)
-
-    # Column titles
-    for col, rel_mean in enumerate(reliability_means):
-        axes[0, col].set_title(str(rel_mean), fontsize=13, fontweight="bold")
-    x_source_rels = 0.5
-    y_source_rels = 1.02
-    if n_rows == 1 and n_cols == 1:
-        x_source_rels = 0.4
-        y_source_rels = 1.04
-    fig.text(
-        x_source_rels,
-        y_source_rels,
-        "Source reliability (mean)",
-        ha="center",
-        va="bottom",
-        fontsize=15,
-        fontweight="bold",
-    )
-
-    # Row labels and right-side tick labels
-    for row, n_sources in enumerate(n_sources_list):
+        # Row label (n_sources)
         axes[row, 0].annotate(
             str(n_sources),
             xy=(0, 0.5),
@@ -191,31 +171,39 @@ def produce_whiskers_plot(
             fontsize=13,
             fontweight="bold",
         )
-        yticklabels = []
-        first_restricted = True
-        for cat in categories:
-            if cat == "expert (delib)":
-                yticklabels.append("expert (delib)")
-            elif cat == "diverse":
-                yticklabels.append("diverse")
-            elif first_restricted:
-                yticklabels.append(f"{cat.split('_')[-1]} restricted")
-                first_restricted = False
-            else:
-                yticklabels.append(f"{cat.split('_')[-1]}")
 
-        axes[row, -1].yaxis.set_label_position("right")
-        axes[row, -1].yaxis.set_ticks_position("right")
-        axes[row, -1].set_yticks(range(len(categories)))
-        axes[row, -1].set_yticklabels(yticklabels, ha="left")
-    x_sources = 0.05
-    y_sources = 0.5
-    if n_rows == 1 and n_cols == 1:
-        x_sources = -0.08
-        y_sources = 0.55
+    plt.tight_layout()
+
+    for row in range(n_rows - 1):
+        for col in range(n_cols):
+            axes[row, col].set_xlabel("")
+
+    for ax in axes.flat:
+        x_min, x_max = ax.get_xlim()
+        margin = (x_max - x_min) * 0.05
+        ax.set_xlim(x_min - margin, x_max + margin)
+
+    for row in range(n_rows):
+        for col in range(n_cols):
+            plt.setp(axes[row, col].get_yticklabels(), visible=False)
+
+    # Column titles
+    for col, rel_mean in enumerate(reliability_means):
+        axes[0, col].set_title(str(rel_mean), fontsize=13, fontweight="bold")
+
+    single_cell = n_rows == 1 and n_cols == 1
     fig.text(
-        x_sources,
-        y_sources,
+        0.4 if single_cell else 0.5,
+        1.04 if single_cell else 1.02,
+        "Source reliability (mean)",
+        ha="center",
+        va="bottom",
+        fontsize=15,
+        fontweight="bold",
+    )
+    fig.text(
+        -0.08 if single_cell else 0.05,
+        0.55 if single_cell else 0.5,
         r"Sources (\#)",
         ha="center",
         va="center",
@@ -225,16 +213,7 @@ def produce_whiskers_plot(
     )
 
     if filename:
-        plt.savefig(
-            f"{filename}.eps",
-            bbox_inches="tight",
-            dpi=800,
-            format="eps",
-        )
-        plt.savefig(
-            f"{filename}.png",
-            bbox_inches="tight",
-            dpi=800,
-        )
+        plt.savefig(f"{filename}.eps", bbox_inches="tight", dpi=800, format="eps")
+        plt.savefig(f"{filename}.png", bbox_inches="tight", dpi=800)
     else:
         plt.show()
