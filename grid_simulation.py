@@ -1,4 +1,7 @@
+from datetime import datetime
+
 import pandas as pd
+import pytz
 from IPython.display import display
 
 from simulation import Simulation
@@ -26,6 +29,10 @@ class GridSimulation:
         self.estimate_sample_size = estimate_sample_size
 
     def run(self):
+        timezone = pytz.timezone("Europe/Brussels")
+        starttime = datetime.now(timezone).strftime("%H:%M:%S")
+        print(f"Starting grid simulation at {starttime} with the following parameters:")
+
         params_df = self.create_parameter_df()
         display(params_df)
         total = len(params_df)
@@ -34,6 +41,9 @@ class GridSimulation:
             params_dict = params.where(pd.notnull(params), None).to_dict()
             print(f"Running simulation {idx} out of {total}...")
             Simulation(**params_dict).run()
+
+        endtime = datetime.now(timezone).strftime("%H:%M:%S")
+        print(f"Finished grid simulation at {endtime}.")
 
     def create_parameter_df(self):
         data = [
