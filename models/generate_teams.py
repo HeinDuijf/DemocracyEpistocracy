@@ -1,10 +1,12 @@
 import itertools as it
 import random as rd
 import time
+from collections import Counter
 
 import numpy as np
 
 from models.agent import Agent
+from models.crowd import Crowd
 from models.sources import Sources
 from models.team import Team
 from utils.basic_functions import calculate_diversity
@@ -21,7 +23,7 @@ def generate_expert_team(sources: Sources, heuristic_size: int | list, size: int
         Agent(id, heuristic, sources) for id, heuristic in enumerate(all_heuristics)
     ]
 
-    agent_score_tuples = [[agent, agent.score] for agent in possible_agents]
+    agent_score_tuples = [[agent, agent.competence()] for agent in possible_agents]
     agent_score_tuples.sort(key=lambda item: item[1], reverse=True)
     best_agents = [agent for [agent, _] in agent_score_tuples[:size]]
     return Team(best_agents, sources)
@@ -74,14 +76,21 @@ def generate_random_crowd(
     possible_agents = [
         Agent(id, heuristic, sources) for id, heuristic in enumerate(all_heuristics)
     ]
-    agent_scores = [agent.score for agent in possible_agents]
+    agent_score_tuples = [[agent, agent.competence()] for agent in possible_agents]
+    agent_scores = [score for [_, score] in agent_score_tuples]
     qualifying_score = np.percentile(agent_scores, qualifying_percentile)
     qualified_agents = [
-        agent for agent in possible_agents if agent.score >= qualifying_score
+        agent for agent, score in agent_score_tuples if score >= qualifying_score
     ]
 
-    random_group = rd.choices(qualified_agents, k=size)
-    return Team(random_group, sources)
+    # random_group = Counter(rd.choices(qualified_agents, k=size))
+
+    n = len(qualified_agents)
+    counts = np.random.multinomial(int(size), [1 / n] * n)
+    random_group = Counter(
+        {agent: int(c) for agent, c in zip(qualified_agents, counts) if c > 0}
+    )
+    return Crowd(random_group, sources)
 
 
 def generate_restricted_team(
@@ -101,10 +110,11 @@ def generate_restricted_team(
         Agent(id, heuristic, sources) for id, heuristic in enumerate(all_heuristics)
     ]
 
-    agent_scores = [agent.score for agent in possible_agents]
+    agent_score_tuples = [[agent, agent.competence()] for agent in possible_agents]
+    agent_scores = [score for [_, score] in agent_score_tuples]
     qualifying_score = np.percentile(agent_scores, qualifying_percentile)
     qualified_agents = [
-        agent for agent in possible_agents if agent.score >= qualifying_score
+        agent for agent, score in agent_score_tuples if score >= qualifying_score
     ]
 
     diversity_dict: dict[Agent, float] = {agent: 0 for agent in qualified_agents}
