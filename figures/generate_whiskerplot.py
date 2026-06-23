@@ -52,8 +52,8 @@ def produce_whiskers_plot(
     fig, axes = plt.subplots(
         n_rows,
         n_cols,
-        figsize=(2 + 3 * n_cols, 1 + 3 * n_rows),
-        sharey="row",
+        figsize=(2 + 2 * n_cols, 1 + 2 * n_rows),
+        sharex="row",
         squeeze=False,
     )
 
@@ -64,11 +64,11 @@ def produce_whiskers_plot(
         lo, hi = vals.min(), vals.max()
         if abs(hi - lo) < 1e-4:
             lo = hi
-        ax.plot([lo, hi], [i, i], color=color, linewidth=linewidth)
-        ax.plot([lo, lo], [i - cap, i + cap], color=color, linewidth=linewidth)
-        ax.plot([hi, hi], [i - cap, i + cap], color=color, linewidth=linewidth)
+        ax.plot([i, i], [lo, hi], color=color, linewidth=linewidth)
+        ax.plot([i - cap, i + cap], [lo, lo], color=color, linewidth=linewidth)
+        ax.plot([i - cap, i + cap], [hi, hi], color=color, linewidth=linewidth)
 
-    def make_yticklabels(categories):
+    def make_xticklabels(categories):
         labels = []
         first_restricted = True
         for cat in categories:
@@ -111,8 +111,8 @@ def produce_whiskers_plot(
             best = max_by_type.idxmax()
             worst = max_by_type.idxmin()
 
-            x_range = facet_agg["accuracy"].max() - facet_agg["accuracy"].min()
-            x_offset = x_range * 0.02
+            y_range = facet_agg["accuracy"].max() - facet_agg["accuracy"].min()
+            y_offset = y_range * 0.02
 
             for i, cat in enumerate(categories):
                 vals = (
@@ -125,46 +125,46 @@ def produce_whiskers_plot(
                     continue
                 if cat == best:
                     ax.text(
-                        vals.max() + x_offset,
                         i,
+                        vals.max() - y_offset,
                         "*",
-                        va="center",
-                        ha="left",
+                        va="bottom",
+                        ha="center",
                         fontsize=10,
                     )
                 elif cat == worst:
                     ax.text(
-                        vals.min() - x_offset,
                         i,
+                        vals.min() - y_offset,
                         "*",
-                        va="center",
-                        ha="right",
+                        va="top",
+                        ha="center",
                         fontsize=10,
                     )
 
-            ax.axhline(0.5, color="gray", linewidth=0.8, linestyle="--")
-            ax.axhline(1.5, color="gray", linewidth=0.8, linestyle="--")
+            ax.axvline(0.5, color="gray", linewidth=0.8, linestyle="--")
+            ax.axvline(1.5, color="gray", linewidth=0.8, linestyle="--")
+            ax.xaxis.grid(True, color="lightgray", linewidth=0.5, zorder=0)
             ax.yaxis.grid(True, color="lightgray", linewidth=0.5, zorder=0)
             ax.set_axisbelow(True)
             locator = (
                 MultipleLocator(0.02) if rel_mean == 0.55 else MultipleLocator(0.01)
             )
-            ax.xaxis.set_major_locator(locator)
-            ax.set_xlabel("Group reliability")
+            ax.yaxis.set_major_locator(locator)
+            ax.set_ylabel("Group reliability")
 
-        # Right-side y-tick labels
-        ax_right = axes[row, -1]
-        ax_right.yaxis.set_label_position("right")
-        ax_right.yaxis.set_ticks_position("right")
-        ax_right.set_yticks(range(len(categories)))
-        ax_right.set_yticklabels(make_yticklabels(categories), ha="left")
+            # Bottom x-tick labels
+            axes[row, col].set_xticks(range(len(categories)))
+            axes[row, col].set_xticklabels(
+                make_xticklabels(categories), ha="right", rotation=45
+            )
 
         # Row label (n_sources)
         axes[row, 0].annotate(
             str(n_sources),
             xy=(0, 0.5),
             xycoords="axes fraction",
-            xytext=(-20, 0),
+            xytext=(-55, 0),
             textcoords="offset points",
             ha="center",
             va="center",
@@ -172,20 +172,20 @@ def produce_whiskers_plot(
             fontweight="bold",
         )
 
-    plt.tight_layout()
-
-    for row in range(n_rows - 1):
-        for col in range(n_cols):
-            axes[row, col].set_xlabel("")
-
-    for ax in axes.flat:
-        x_min, x_max = ax.get_xlim()
-        margin = (x_max - x_min) * 0.05
-        ax.set_xlim(x_min - margin, x_max + margin)
-
     for row in range(n_rows):
         for col in range(n_cols):
-            plt.setp(axes[row, col].get_yticklabels(), visible=False)
+            plt.setp(axes[row, col].get_xticklabels(), visible=(row == n_rows - 1))
+
+    for row in range(n_rows):
+        for col in range(1, n_cols):
+            axes[row, col].set_ylabel("")
+
+    plt.tight_layout()
+
+    for ax in axes.flat:
+        y_min, y_max = ax.get_ylim()
+        margin = (y_max - y_min) * 0.05
+        ax.set_ylim(y_min - margin, y_max + margin)
 
     # Column titles
     for col, rel_mean in enumerate(reliability_means):
@@ -202,7 +202,7 @@ def produce_whiskers_plot(
         fontweight="bold",
     )
     fig.text(
-        -0.08 if single_cell else 0.05,
+        -0.08 if single_cell else 0,
         0.55 if single_cell else 0.5,
         r"Sources (\#)",
         ha="center",
