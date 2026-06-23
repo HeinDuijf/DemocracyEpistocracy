@@ -47,7 +47,7 @@ def boxplot_individual_scores(n_sources: int = 13, heuristic_size: int = 5, show
 
     fig = sns.boxplot(
         data=scores_df,
-        palette="Greys",
+        color="lightgray",
         boxprops=dict(linewidth=0.5),
         whiskerprops=dict(linewidth=0.5),
         capprops=dict(linewidth=0.5),
