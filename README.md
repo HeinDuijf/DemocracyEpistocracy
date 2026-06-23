@@ -25,9 +25,16 @@ agent-based model, see the picture below and the [Jupyter Notebook](/NotebookWal
 
 
 ## 1. Setup
-To run the project, you first need to install the required packages
+To run the project, you first need to install the required packages using pip
 ```commandline
 pip install -r requirements.txt
+```
+
+or using Anaconda to create and activate an environment called `work`:
+
+```commandline
+conda env create -f environment.yml
+conda activate work
 ```
 
 ## 2. Simulation
