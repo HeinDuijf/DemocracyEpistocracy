@@ -59,11 +59,17 @@ class Simulation:
             )
             with Pool() as pool:
                 params, total = self.get_params()
+                progress_message = "Calculating aggregation results"
+                if self.estimate_sample_size is not None:
+                    progress_message = (
+                        f"Estimating aggregation results "
+                        f"({self.estimate_sample_size} samples)"
+                    )
                 results_aggregation = pd.DataFrame(
                     tqdm(
                         pool.map(crowd_simulate_aggregation, params),
                         total=total,
-                        desc="Calculating/estimating aggregation results",
+                        desc=progress_message,
                     )
                 )
 
