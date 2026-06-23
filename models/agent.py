@@ -13,16 +13,21 @@ class Agent:
             access to.
         sources (Sources):
             The sources that the agent could access.
-        score:
-            The agent’s score.
+        opinion:
+            The agent’s opinion, which is determined by the majority winner of the
+            valences of the sources in her heuristic. Default is None, but should be
+            updated by calling update_opinion() after initializing the agent.
+        # score:
+        #     The agent’s score.
     """
 
     def __init__(self, no, heuristic, sources: Sources):
         self.no = no
         self.heuristic = heuristic
         self.sources = sources
-        self.score = self.competence()
-        self.update_opinion()
+        self.opinion = None
+        # self.score = self.competence()
+        # self.update_opinion()
 
     def update_opinion(self) -> None:
         self.opinion = majority_winner(
