@@ -9,7 +9,6 @@ pytest
 pyvis
 statistics
 notebook
-concurrent.futures
 tqdm
 ipython
 
