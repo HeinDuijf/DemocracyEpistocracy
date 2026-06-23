@@ -163,7 +163,7 @@ class Simulation:
                 )
             elif composition == "expert":
                 raise Warning(
-                    "Aggregation procedure not implemented for expert team type. Skipping."
+                    "Aggregation procedure not implemented for expert team type."
                 )
             else:
                 raise ValueError(f"Unknown group type: {composition}")
