@@ -25,9 +25,9 @@ if __name__ == "__main__":
     GridSimulation(
         procedures=["aggregation"],
         group_types=team_types,
-        n_sources_list=[13, 17],
+        n_sources_list=[17, 13],
         reliability_distribution_list=rels,
         heuristic_size=5,
-        group_size=1_001,
-        n_samples=1_000,
+        group_size=100_000_001,
+        n_samples=100,
     ).run()
