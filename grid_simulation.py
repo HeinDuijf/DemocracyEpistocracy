@@ -39,7 +39,7 @@ class GridSimulation:
         for idx, params in params_df.iterrows():
             # convert to dict and turn NaN values into None
             params_dict = params.where(pd.notnull(params), None).to_dict()
-            print(f"Running simulation {idx} out of {total}...")
+            print(f"Running simulation {idx + 1} out of {total}...")
             Simulation(**params_dict).run()
 
         endtime = datetime.now(timezone).strftime("%H:%M:%S")
