@@ -182,4 +182,3 @@ def calculate_competence_with_duplicates(
             elif weight_sources_positive == threshold:
                 competence += probability_subset / 2
     return competence, None
-    return competence, None
