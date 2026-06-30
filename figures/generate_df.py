@@ -33,3 +33,21 @@ def produce_df_results(
             df = df[df["n_sources"].isin(n_sources_list)]
             dfs.append(df)
     return pd.concat(dfs, ignore_index=True)
+
+
+GROUP_COLS = [
+    "group_size",
+    "n_sources",
+    "heuristic_size",
+    "reliability_mean",
+    "reliability_range",
+    "n_samples",
+    "group_type",
+    "procedure",
+]
+
+
+def aggregate_df_results(df: pd.DataFrame) -> pd.DataFrame:
+    return df.groupby(GROUP_COLS, as_index=False)["accuracy"].agg(
+        accuracy_median="median", accuracy_mean="mean"
+    )
