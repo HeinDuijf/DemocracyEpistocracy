@@ -60,6 +60,30 @@ def generate_diverse_team(sources: Sources, heuristic_size: int | list, size: in
     return Team(diverse_group, sources)
 
 
+def generate_qualified_heuristics(
+    sources: Sources,
+    heuristic_size: int | list,
+    qualifying_percentile: float = 0.0,
+) -> list[Agent]:
+    if not isinstance(heuristic_size, list):
+        heuristic_size = [heuristic_size]
+    all_heuristics = it.chain.from_iterable(
+        sources.all_heuristics(size) for size in heuristic_size
+    )
+    possible_heuristics = [
+        Agent(id, heuristic, sources) for id, heuristic in enumerate(all_heuristics)
+    ]
+    heuristic_score_tuples = [
+        [agent, agent.competence()] for agent in possible_heuristics
+    ]
+    heuristic_scores = [score for [_, score] in heuristic_score_tuples]
+    qualifying_score = np.percentile(heuristic_scores, qualifying_percentile)
+    qualified_heuristics = [
+        agent for agent, score in heuristic_score_tuples if score >= qualifying_score
+    ]
+    return qualified_heuristics
+
+
 def generate_random_crowd(
     sources: Sources,
     heuristic_size: int | list,
@@ -67,24 +91,11 @@ def generate_random_crowd(
     qualifying_percentile: float = 0.0,
     # without_replacement: bool = False,
 ):
-    if not isinstance(heuristic_size, list):
-        heuristic_size = [heuristic_size]
-
-    all_heuristics = it.chain.from_iterable(
-        sources.all_heuristics(size) for size in heuristic_size
+    qualified_agents = generate_qualified_heuristics(
+        sources=sources,
+        heuristic_size=heuristic_size,
+        qualifying_percentile=qualifying_percentile,
     )
-    possible_agents = [
-        Agent(id, heuristic, sources) for id, heuristic in enumerate(all_heuristics)
-    ]
-    agent_score_tuples = [[agent, agent.competence()] for agent in possible_agents]
-    agent_scores = [score for [_, score] in agent_score_tuples]
-    qualifying_score = np.percentile(agent_scores, qualifying_percentile)
-    qualified_agents = [
-        agent for agent, score in agent_score_tuples if score >= qualifying_score
-    ]
-
-    # random_group = Counter(rd.choices(qualified_agents, k=size))
-
     n = len(qualified_agents)
     counts = np.random.multinomial(int(size), [1 / n] * n)
     random_group = Counter(
