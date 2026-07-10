@@ -60,7 +60,7 @@ def line_plot_comparison_weighted_procedure(
     marker_map = {n_sources_sorted[0]: "o", n_sources_sorted[1]: "s"}
     offset_map = {n_sources_sorted[0]: -0.15, n_sources_sorted[1]: 0.15}
 
-    fig, ax = plt.subplots(figsize=(5, 4))
+    fig, ax = plt.subplots(figsize=(5, 3))
 
     for n_sources in n_sources_sorted:
         sub = plot_df[plot_df["n_sources"] == n_sources]
