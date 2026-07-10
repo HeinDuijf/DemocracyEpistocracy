@@ -28,7 +28,7 @@ def boxplot_individual_scores(n_sources: int = 13, heuristic_size: int = 5, show
         sources = Sources(n_sources, reliability_distribution)
         n_possible_heuristics = comb(n_sources, heuristic_size)
         team = generate_expert_team(sources, heuristic_size, n_possible_heuristics)
-        data = np.array([agent.score for agent in team.members])
+        data = np.array([agent.competence() for agent in team.members])
         data_df = pd.DataFrame(data, columns=[rel_mean])
         scores_df = pd.concat([scores_df, data_df], axis=1)
 
@@ -83,8 +83,7 @@ def df_individual_scores(n_sources: int = 13, heuristic_size: int = 5):
             sources = Sources(n_sources, reliability_distribution)
             n_possible_heuristics = comb(n_sources, heuristic_size)
             team = generate_expert_team(sources, heuristic_size, n_possible_heuristics)
-            data = np.array([agent.score for agent in team.members])
-            data = np.array([agent.score for agent in team.members])
+            data = np.array([agent.competence() for agent in team.members])
             data_mean = data.mean() * 100
             data_std = data.std() * 100
             data_max = data.max() * 100
