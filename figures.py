@@ -1,18 +1,32 @@
+from figures.comparison_weighted_procedure import (
+    line_plot_comparison_weighted_procedure,
+)
+from figures.generate_combined_lineplot import combined_lineplot
 from figures.generate_heatmap import heatmap
-from figures.generate_whiskerplot import produce_whiskers_plot
+from figures.generate_weights_lineplot import weights_lineplot
 from figures.individual_scores import boxplot_individual_scores
 
 if __name__ == "__main__":
     colors = False
-    # heatmap(procedure="deliberation", colors=colors)
-    produce_whiskers_plot(
-        filename="figures/images/whiskerplot_all",
-        n_sources_list=[13, 17],
-        rel_mean_list=[0.55, 0.6],
+
+    boxplot_individual_scores()
+    heatmap(
+        procedure="deliberation",
+        colors=colors,
+        rel_mean_max=0.60,
+        filename="figures/images/heatmap_deliberation",
     )
-    # produce_whiskers_plot(
-    #     n_sources_list=[13],
-    #     rel_mean_list=[0.55],
-    #     filename="figures/images/whiskerplot_13_55",
-    # )
-    # boxplot_individual_scores()
+    combined_lineplot(
+        n_sources_list=[13, 17],
+        rel_mean_max=0.60,
+        filename="figures/images/lineplot_combined",
+    )
+    weights_lineplot(
+        n_sources=13,
+        filename="figures/images/weights",
+    )
+    line_plot_comparison_weighted_procedure(
+        rel_mean_max=0.6,
+        show_progress=True,
+        filename="figures/images/accuracy_difference_vs_weights",
+    )
