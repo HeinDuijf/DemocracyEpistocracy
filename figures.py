@@ -21,6 +21,12 @@ if __name__ == "__main__":
         rel_mean_max=0.60,
         filename="figures/images/lineplot_combined",
     )
+    combined_lineplot(
+        show_aggregation=False,
+        n_sources_list=[13, 17],
+        rel_mean_max=0.60,
+        filename="figures/images/lineplot_combined_without_aggregation",
+    )
     weights_lineplot(
         n_sources=13,
         filename="figures/images/weights",
