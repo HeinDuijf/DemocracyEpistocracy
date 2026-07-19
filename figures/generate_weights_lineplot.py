@@ -32,6 +32,15 @@ def weights_lineplot(
 
     cmap = colormaps["gray_r"]
     fig, ax = plt.subplots(figsize=(5, 3))
+
+    ax.axhline(
+        1 / n_sources,
+        color="black",
+        linestyle="--",
+        linewidth=0.8,
+        label="Equal weight",
+    )
+    
     for i, group_type in enumerate(group_types):
         shade = 0.25 + 0.6 * (i / (len(group_types) - 1))
         sub = df_weights[df_weights["group_type"] == group_type]
@@ -43,14 +52,6 @@ def weights_lineplot(
             markersize=3,
             label=group_type.split("_")[1],
         )
-
-    ax.axhline(
-        1 / n_sources,
-        color="black",
-        linestyle="--",
-        linewidth=0.8,
-        label="Equal weight",
-    )
 
     ax.set_xlabel("Source (ranked by reliability, ascending)")
     ax.set_ylabel("Weight (fraction)")
