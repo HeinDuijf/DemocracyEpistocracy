@@ -24,31 +24,25 @@ agent-based model, see the picture below and the [Jupyter Notebook](/NotebookWal
 
 
 ## 1. Setup
-To run the project, you first need to install the required packages using pip
+To run the project, you first need to install the package manager [uv](https://docs.astral.sh/uv/). Then, from the repository root, install the dependencies into a local virtual environment:
 ```commandline
-pip install -r requirements.txt
+uv sync
 ```
-
-or using Anaconda to create and activate an environment called `work`:
-
-```commandline
-conda env create -f environment.yml
-conda activate work
-```
+This creates a `.venv` folder and installs the exact versions pinned in `uv.lock`. Prefix subsequent commands with `uv run` (e.g. `uv run python main.py`) to run them inside this environment.
 
 ## 2. Simulation
 1. To get a feel for the agent-based model, you can check out this
 [Jupyter Notebook](NotebookWalkthrough.ipynb) (or the [GitHub page](https://heinduijf.github.io/DemocracyEpistocracy/)), which includes some network 
 visualizations by running
 ```commandline
-jupyter lab NotebookWalkthrough.ipynb
+uv run jupyter lab NotebookWalkthrough.ipynb
 ```
 Running the cells in the notebook will create several html files in the folder `www` with 
 visualizations of agent-based models.
 
 2. To run the simulations and generate the data, run the script
 ```commandline
-python main.py
+uv run python main.py
 ```
 which will create several csv files in the folder `data`.
 
