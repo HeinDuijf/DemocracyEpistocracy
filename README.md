@@ -1,6 +1,6 @@
 # Epistemic Democracy and Epistocracy
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21918181.svg)](https://doi.org/10.5281/zenodo.21918181)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21918742.svg)](https://doi.org/10.5281/zenodo.21918742)
 
 This repository is associated with a working paper titled ‘Epistemic Democracy and Epistocracy: A Simulation Study’ ([PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Here's the abstract: 
 
@@ -89,6 +89,6 @@ This repository is not optimized for computational speed, but for findability, a
 
 ## 6. Licence and citation
 This repository accompanies an academic paper (draft available on [PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Please cite this repository as follows:
-- Duijf, H. (2026). _Democratic and epistocratic forms of aggregation and deliberation in an evidential sources framework_. Zenodo. https://doi.org/10.5281/zenodo.21918181
+- Duijf, H. (2026). _Democratic and epistocratic forms of aggregation and deliberation in an evidential sources framework_. Zenodo. https://doi.org/10.5281/zenodo.21918742
 
 Released under the [MIT licence](LICENCE.md).
