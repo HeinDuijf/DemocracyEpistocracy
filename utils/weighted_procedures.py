@@ -135,12 +135,12 @@ def weight_results_df(
     )
 
     df["accuracy_diff"] = (
-        pd.to_numeric(df["accuracy_median"], errors="coerce")
-        - df["baseline_accuracy_median"]
+        df["baseline_accuracy_median"] 
+        - pd.to_numeric(df["accuracy_median"], errors="coerce") 
     )
     df["accuracy_diff_weights"] = (
-        pd.to_numeric(df["accuracy_calculated"], errors="coerce")
-        - df["baseline_accuracy_median"]
+        df["baseline_accuracy_median"]
+        - pd.to_numeric(df["accuracy_calculated"], errors="coerce")
     )
 
     df["accuracy_diff_weights"] = df["accuracy_diff_weights"].round(6)

@@ -92,7 +92,7 @@ def combined_lineplot(
 
             def compute_value(vals, diverse_med=diverse_med):
                 if measure == "absolute":
-                    return 100 * (vals.median() - diverse_med)
+                    return 100 * (diverse_med - vals.median())
                 return float("nan")
 
             expert_vals = df_delib_n[
@@ -126,7 +126,7 @@ def combined_lineplot(
         ax.set_ylabel("Accuracy difference (pp)")
     else:
         ax.set_ylabel(r"Error reduction (\%)")
-    ax.set_ylim(bottom=0)
+    ax.set_ylim(top=0)
 
     color_handles = [
         Line2D([0], [0], color=cmap(0.25 + 0.6 * (i / max(n_rel_means - 1, 1))))

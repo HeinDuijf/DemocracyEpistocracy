@@ -89,7 +89,7 @@ def line_plot_comparison_weighted_procedure(
     ax.set_xlabel("Reliability (mean)")
     ax.set_ylabel("Accuracy difference (pp)")
     ax.margins(y=0.1)
-    ax.set_ylim(bottom=0)
+    ax.set_ylim(top=0)
 
     legend_handles = [
         Line2D(
