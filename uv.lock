@@ -420,6 +420,11 @@ dependencies = [
     { name = "tqdm" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "nbconvert" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "ipython", specifier = ">=9.15.0" },
@@ -436,6 +441,9 @@ requires-dist = [
     { name = "statsmodels", specifier = ">=0.14.6" },
     { name = "tqdm", specifier = ">=4.69.0" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "nbconvert", specifier = ">=7.17.1" }]
 
 [[package]]
 name = "docutils"
