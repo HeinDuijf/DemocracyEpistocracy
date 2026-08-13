@@ -1,5 +1,6 @@
 # Epistemic Democracy and Epistocracy
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21918181.svg)](https://doi.org/10.5281/zenodo.21918181)
 
 This repository is associated with a working paper titled ‘Epistemic Democracy and Epistocracy: A Simulation Study’ ([PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Here's the abstract: 
 
