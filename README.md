@@ -89,6 +89,6 @@ This repository is not optimized for computational speed, but for findability, a
 
 ## 6. Licence and citation
 This repository accompanies an academic paper (draft available on [PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Please cite this repository as follows:
-- Duijf, H. (2026). _Democratic and epistocratic forms of aggregation and deliberation in an evidential sources framework_. 
+- Duijf, H. (2026). _Democratic and epistocratic forms of aggregation and deliberation in an evidential sources framework_. Zenodo. https://doi.org/10.5281/zenodo.21918181
 
 Released under the [MIT licence](LICENCE.md).
