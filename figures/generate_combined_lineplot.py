@@ -141,7 +141,7 @@ def combined_lineplot(
         bbox_to_anchor=(1.02, 0.8),
         borderaxespad=0.0,
     )
-    color_legend._legend_box.align = "left"
+    color_legend._legend_box.align = "left" # type: ignore
     ax.add_artist(color_legend)
 
     size_handles = [
@@ -156,7 +156,7 @@ def combined_lineplot(
         bbox_to_anchor=(1.02, 0.5),
         borderaxespad=0.0,
     )
-    size_legend._legend_box.align = "left"
+    size_legend._legend_box.align = "left" # type: ignore
     ax.add_artist(size_legend)
 
     style_handles = [
@@ -172,7 +172,7 @@ def combined_lineplot(
         bbox_to_anchor=(1.02, 0.2),
         borderaxespad=0.0,
     )
-    style_legend._legend_box.align = "left"
+    style_legend._legend_box.align = "left" # type: ignore
     ax.add_artist(style_legend)
 
     plt.tight_layout()
