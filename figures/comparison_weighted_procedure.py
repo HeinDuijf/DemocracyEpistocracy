@@ -1,4 +1,7 @@
+from pathlib import Path
+
 import matplotlib.pyplot as plt
+import pandas as pd
 from matplotlib.lines import Line2D
 
 from utils.weighted_procedures import weight_results_df
@@ -142,3 +145,66 @@ def line_plot_comparison_weighted_procedure(
     if show:
         plt.show()
     plt.close()
+
+
+def table_comparison_weighted_procedure(
+    procedure_list: list[str] = ["deliberation", "aggregation"],
+    heuristic_size: int | list[int] = 5,
+    rel_mean_max: float = 0.6,
+    reliability_range: float = 0.2,
+    n_sources_list: list[int] = [13, 17],
+    date: str = "",
+    show_progress: bool = True,
+    filename: str | None = None,
+) -> pd.DataFrame:
+    """Produce a table comparing the simulated accuracy of the aggregation procedure
+    with the accuracy calculated using the weighted procedure.
+
+    Each row is one combination of number of sources, reliability (mean) and group
+    type, with the simulated accuracy, the weighted accuracy, and the difference
+    between them (simulated minus weighted).
+
+    Args:
+        rel_mean_max: Upper bound for reliability mean values shown.
+        filename: Output path without extension. Saves .csv and .tex. Default is to not save the table.
+
+    Returns:
+        The table as a DataFrame.
+    """
+    df = weight_results_df(
+        procedure_list=procedure_list,
+        heuristic_size=heuristic_size,
+        rel_mean_max=rel_mean_max,
+        reliability_range=reliability_range,
+        n_sources_list=n_sources_list,
+        date=date,
+        show_progress=show_progress,
+    )
+    df["reliability"] = df["reliability_mean"].map("{:.2f}".format)
+    df["simulated_accuracy"] = pd.to_numeric(df["accuracy_median"])
+    df["weighted_accuracy"] = pd.to_numeric(df["accuracy_calculated"])
+    df["difference"] = df["simulated_accuracy"] - df["weighted_accuracy"]
+
+    df["group_type_order"] = df["group_type"].str.split("_").str[1].astype(int)
+    df = df.sort_values(["n_sources", "reliability", "group_type_order"])
+    table_df = df[
+        [
+            "n_sources",
+            "reliability",
+            "group_type",
+            "simulated_accuracy",
+            "weighted_accuracy",
+            "difference",
+        ]
+    ].reset_index(drop=True)
+
+    if filename is not None:
+        Path(filename).parent.mkdir(parents=True, exist_ok=True)
+        table_df.to_csv(f"{filename}.csv", index=False)
+        table_df.to_latex(
+            f"{filename}.tex",
+            index=False,
+            float_format="%.4f",
+            escape=True,
+        )
+    return table_df
