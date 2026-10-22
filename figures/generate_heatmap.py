@@ -1,5 +1,7 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
+
 from .generate_df import produce_df_results
 
 
@@ -84,7 +86,7 @@ def heatmap(
     )
     # font_style = {"family": "Times New Roman", "size": 12}
     # plt.rc("font", **font_style)
-    plt.figure(figsize=(3, 2))
+    plt.figure(figsize=(2.5, 1.5))
 
     heatmap_params = {
         # "annot": True,
@@ -110,7 +112,8 @@ def heatmap(
             heatmap_params["vmax"] = 10
         else:
             positives_df = pivot_df > 0.0
-            annot_df[positives_df] = "+" + annot_df[positives_df]
+            annot_df = annot_df.where(~positives_df, "+" + annot_df)
+            # annot_df[positives_df] = "+" + annot_df[positives_df]
 
     if measure == "relative":
         annot_df = pivot_df.copy().map(lambda x: f"{x:.0f}")
@@ -121,7 +124,8 @@ def heatmap(
             heatmap_params["vmax"] = 100
         else:
             positives_df = pivot_df > 0.0
-            annot_df[positives_df] = "+" + annot_df[positives_df]
+            annot_df = annot_df.where(~positives_df, "+" + annot_df)
+            # annot_df[positives_df] = "+" + annot_df[positives_df]
 
     # effect_df = df.pivot(
     #     index="reliability_mean", columns="n_sources", values="effect_size"
@@ -143,6 +147,10 @@ def heatmap(
     # annot_df[not_sig] = ""
 
     heatmap_params["annot"] = annot_df
+    # Evenly spaced colorbar ticks that always include vmin and vmax
+    heatmap_params["cbar_kws"]["ticks"] = np.linspace(
+        heatmap_params["vmin"], heatmap_params["vmax"], 3
+    ).astype(int)
 
     fig = sns.heatmap(
         df_heatmap,
