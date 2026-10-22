@@ -31,8 +31,8 @@ if __name__ == "__main__":
         n_sources=13,
         filename="figures/images/weights",
     )
-    line_plot_comparison_weighted_procedure(
-        rel_mean_max=0.6,
-        show_progress=True,
-        filename="figures/images/accuracy_difference_vs_weights",
-    )
+    # line_plot_comparison_weighted_procedure(
+    #     rel_mean_max=0.6,
+    #     show_progress=True,
+    #     filename="figures/images/accuracy_difference_vs_weights",
+    # )
