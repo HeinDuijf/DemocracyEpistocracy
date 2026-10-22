@@ -1,10 +1,5 @@
 # Epistemic Democracy and Epistocracy
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21918742.svg)](https://doi.org/10.5281/zenodo.21918742)
-
-<!-- This repository is associated with a working paper titled ‘Epistemic Democracy and Epistocracy: A Simulation Study’ ([PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Here's the abstract: 
-
-> The debate between democracy and epistocracy sits at the core of political epistemology. Epistemic democrats commonly argue that democratic procedures—in particular, voting procedures with universal suffrage and deliberative procedures with diverse groups—outperform expert rule because of inclusive participation and the aggregation or exchange of diverse perspectives. In contrast, epistocrats argue that political decisions should be made by the knowledgeable few, claiming that expertise leads to superior outcomes, especially in light of citizens’ staggering lack of political knowledge. To evaluate the potential tradeoffs, this paper uses agent-based modelling to systematically compare institutional arrangements along two dimensions: the type of procedure (deliberation or aggregation) and the enfranchisement restrictions, if any (expert only, competence restriction, or inclusive). I argue that this formal study improves our understanding of the complex interactions between institutional design, participant selection, and epistemic performance. -->
 
 This repository investigates the collective problem-solving capacities of teams in an evidential sources framework. The simulation study focuses on the following arrangements:
 1. Deliberation is evidence-based: it is modelled as the exchange of ‘evidences’ and the team’s decision follows the majority evidence. 
@@ -87,8 +82,3 @@ The notebook considers the question of whether the diversity-expertise tradeoff 
 ## 5. Computational limitations
 This repository is not optimized for computational speed, but for findability, accessibility, interoperability, and reusability ([FAIR](https://www.uu.nl/en/research/research-data-management/guides/how-to-make-your-data-fair)).
 
-<!-- ## 6. Licence and citation
-This repository accompanies an academic paper (draft available on [PhilSci-Archive](https://philsci-archive.pitt.edu/id/eprint/30758)). Please cite this repository as follows:
-- Duijf, H. (2026). _Democratic and epistocratic forms of aggregation and deliberation in an evidential sources framework_. Zenodo. https://doi.org/10.5281/zenodo.21918742
-
-Released under the [MIT licence](LICENCE.md). -->
